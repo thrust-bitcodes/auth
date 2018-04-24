@@ -2,7 +2,7 @@
   "description": "Authentication and authorization module",
   "name": "auth",
   "path": "index.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Cleverson Puche, Leandro Schmitt & Bruno Machado",
   "dependencies": {
     "bitcodes": [
