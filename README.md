@@ -21,8 +21,10 @@ var server = require('http')
 var router = require('router')
 var auth   = require('auth')
 
+ //O processamento de URLs é feito pelo bitcode 'url-parser'.
+ //Vide as possíveis opções na documentação do mesmo.
 auth
-  .notAuthenticatedUrls(['/', '/public'])
+  .notAuthenticatedUrls(['/', '/public', '/auth/*'])
   .authorizations({
       "/app/produtos/cadastrar": ["user"],
       "/app/produtos/*": ["admin"],
@@ -204,7 +206,7 @@ authorizations(objAuths)
 * Método utilizado para setar as URLs que não necessitam de autenticação.
 * @example
 * @file startup.js
-* @code auth.notAuthenticatedUrls(['/', '/public']);
+* @code auth.notAuthenticatedUrls(['/', '/public', '/admin/auth/*']);
 */
 notAuthenticatedUrls(urls)
 
@@ -257,6 +259,7 @@ Exemplo:
 ```
 Acesse também os outros *bitcodes* utilizados no exemplo para melhor entendimento:
 
+- [thrust-bitcodes/url-parser](https://github.com/thrust-bitcodes/url-parser)
 - [thrust-bitcodes/http](https://github.com/thrust-bitcodes/http)
 - [thrust-bitcodes/router](https://github.com/thrust-bitcodes/router)
 

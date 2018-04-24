@@ -15,7 +15,7 @@ var Auth = function () {
 
   var self = this;
   var _authorizations;
-  var _notAuthenticatedUrls = [];
+  var _notAuthenticatedUrls;
   var _canRefreshTokenFn;
   var _authorizeFn;
   var _useSecureAuthentication = false;
@@ -50,13 +50,13 @@ var Auth = function () {
     return self;
   };
 
-/**
-* Função que pode ser adicionada ao auth para substituir a função padrão de autenticação.
-* @example
-* @file startup.js
-* @code
-* auth.authorizeFn(function(request, url, urlRoles, userData))
-*/
+  /**
+  * Função que pode ser adicionada ao auth para substituir a função padrão de autenticação.
+  * @example
+  * @file startup.js
+  * @code
+  * auth.authorizeFn(function(request, url, urlRoles, userData))
+  */
   this.authorizeFn = function (authorizeFn) {
     _authorizeFn = authorizeFn;
     return self;
@@ -71,20 +71,21 @@ var Auth = function () {
   this.notAuthenticatedUrls = function (urls) {
     if (urls) {
       _notAuthenticatedUrls = typeof urls === 'string' ? [urls] : urls;
+      _notAuthenticatedUrls = urlParser.buildUrlRules(_notAuthenticatedUrls);
     }
 
     return self;
   };
 
-/**
-* Método utilizado para setar a expiração do token.
-* Pode ser passado como argumento apenas o tempo, que então mudará o default, ou passar junto com um nome de aplicação, que configurará apenas para esta.
-* @example
-* @file startup.js
-* @code 
-      auth.accessTokenTTL(16000); //Mudando default
-      auth.accessTokenTTL('meuApp', 16000); Mudando por aplicação
-*/
+  /**
+  * Método utilizado para setar a expiração do token.
+  * Pode ser passado como argumento apenas o tempo, que então mudará o default, ou passar junto com um nome de aplicação, que configurará apenas para esta.
+  * @example
+  * @file startup.js
+  * @code 
+        auth.accessTokenTTL(16000); //Mudando default
+        auth.accessTokenTTL('meuApp', 16000); Mudando por aplicação
+  */
   this.accessTokenTTL = function (app, ttl) {
     if (arguments.length == 1) {
       ttl = app;
@@ -96,15 +97,15 @@ var Auth = function () {
     return self;
   };
 
-/**
-* Método utilizado para setar a expiração do refresh de token.
-* Pode ser passado como argumento apenas o tempo, que então mudará o default, ou passar junto com um nome de aplicação, que configurará apenas para esta.
-* @example
-* @file startup.js
-* @code 
-      auth.refreshTokenTTL(16000); //Mudando default
-      auth.refreshTokenTTL('meuApp', 16000); Mudando por aplicação
-*/
+  /**
+  * Método utilizado para setar a expiração do refresh de token.
+  * Pode ser passado como argumento apenas o tempo, que então mudará o default, ou passar junto com um nome de aplicação, que configurará apenas para esta.
+  * @example
+  * @file startup.js
+  * @code 
+        auth.refreshTokenTTL(16000); //Mudando default
+        auth.refreshTokenTTL('meuApp', 16000); Mudando por aplicação
+  */
   this.refreshTokenTTL = function (app, ttl) {
     if (arguments.length == 1) {
       ttl = app;
@@ -149,19 +150,19 @@ var Auth = function () {
     }
   }
 
-/**
-* Função que pode ser utilizada em um middleware, apenas para validar a autorização, vide exemplo de autorização sem autenticação acima.
-* @example
-* @file startup.js
-* @code
-* auth.validateOnlyAuthorization(params, request, response, userData)
-*/
+  /**
+  * Função que pode ser utilizada em um middleware, apenas para validar a autorização, vide exemplo de autorização sem autenticação acima.
+  * @example
+  * @file startup.js
+  * @code
+  * auth.validateOnlyAuthorization(params, request, response, userData)
+  */
   this.validateOnlyAuthorization = function (params, request, response, userData) {
     try {
       if (!isAuthorized(request, userData)) {
         throw new Error('Authorization Error: You are not allowed to access this resource.');
       }
-      
+
       return true
     } catch (error) {
       print(error);
@@ -208,9 +209,9 @@ var Auth = function () {
   * @file logout-endpoint.js
   * @code authentication.destroyAuthentication(params, request, response)
   */
- this.destroyAuthentication = function (params, request, response) {
-  setTokenIntoHeader(params, request, response, 'undefined')
-}
+  this.destroyAuthentication = function (params, request, response) {
+    setTokenIntoHeader(params, request, response, 'undefined')
+  }
 
   function isAuthorized(request, userData) {
     if (!_authorizations) {
@@ -222,7 +223,7 @@ var Auth = function () {
     if (!_authorizeFn && !userRoles) {
       return true;
     }
-    
+
     if (typeof userRoles === 'string') {
       userRoles = [userRoles];
     }
@@ -231,7 +232,7 @@ var Auth = function () {
       if (_authorizeFn) {
         return _authorizeFn(request, request.requestURI, urlRule.data, userData, urlRule);
       } else {
-        return urlRule.data.some(function(role) {
+        return urlRule.data.some(function (role) {
           return userRoles.indexOf(role) > -1;
         });
       }
@@ -239,7 +240,7 @@ var Auth = function () {
   };
 
   function isAuthenticatedUrl(requestURI) {
-    return _notAuthenticatedUrls.indexOf(requestURI) < 0;
+    return !_notAuthenticatedUrls || !urlParser.urlMatches(_notAuthenticatedUrls, requestURI);
   }
 
   function notAuthenticated(response) {
