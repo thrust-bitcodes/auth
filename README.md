@@ -185,9 +185,9 @@ authorizeFn(newFn)
 * @example
 * @file startup.js
 * @code
-* auth.validateOnlyAuthorization(request, userData)
+* auth.validateOnlyAuthorization(params, request, response, userData)
 */
-validateOnlyAuthorization(request, userData)
+validateOnlyAuthorization(params, request, response, userData)
 
 /**
 * Método utilizado para setar o objeto de autorizações, sendo que a chave deve ser a URL e o valor as roles desta URL

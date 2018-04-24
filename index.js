@@ -154,9 +154,9 @@ var Auth = function () {
 * @example
 * @file startup.js
 * @code
-* auth.validateOnlyAuthorization(request, userData)
+* auth.validateOnlyAuthorization(params, request, response, userData)
 */
-  this.validateOnlyAuthorization = function (request, userData) {
+  this.validateOnlyAuthorization = function (params, request, response, userData) {
     try {
       if (!isAuthorized(request, userData)) {
         throw new Error('Authorization Error: You are not allowed to access this resource.');
