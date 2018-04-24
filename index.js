@@ -199,6 +199,19 @@ var Auth = function () {
     return tkn;
   }
 
+  /**
+  * Destrói um autenticação caso ele exista
+  * @param {Object} params - Parâmetros da requisição
+  * @param {Object} request - Request da requisição
+  * @param {Object} response - Response da requisição
+  * @example
+  * @file logout-endpoint.js
+  * @code authentication.destroyAuthentication(params, request, response)
+  */
+ this.destroyAuthentication = function (params, request, response) {
+  setTokenIntoHeader(params, request, response, 'undefined')
+}
+
   function isAuthorized(request, userData) {
     if (!_authorizations) {
       return true;
@@ -280,9 +293,11 @@ var Auth = function () {
   function extractToken(request, name) {
     var cookies = request.cookies
 
-    for (var i = 0; i < cookies.length; i++) {
-      if (cookies[i].getName() === name) {
-        return cookies[i].getValue()
+    if (cookies) {
+      for (var i = 0; i < cookies.length; i++) {
+        if (cookies[i].getName() === name) {
+          return cookies[i].getValue()
+        }
       }
     }
   }
