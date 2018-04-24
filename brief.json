@@ -1,0 +1,17 @@
+{
+  "description": "Authentication and authorization module",
+  "name": "auth",
+  "path": "index.js",
+  "version": "0.0.1",
+  "author": "Cleverson Puche, Leandro Schmitt & Bruno Machado",
+  "dependencies": {
+    "bitcodes": [
+      "thrust-bitcodes/jwt",
+      "thrust-bitcodes/url-parser"
+    ],
+    "jars": [
+      "org.bitbucket.b_c:jose4j:0.6.1",
+      "org.slf4j:slf4j-api:1.7.6"
+    ]
+  }
+}
