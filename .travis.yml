@@ -9,3 +9,10 @@ before_install:
   - docker build -t thrust-v4 ci/
 
 script: docker run -v $(pwd):/app thrust-v4  /bin/sh -c "cd app/test && thrust install && thrust test.js"
+
+deploy:
+  provider: releases
+  api_key: $githubToken
+  skip_cleanup: true
+  on:
+    tags: true

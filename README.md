@@ -1,4 +1,4 @@
-Auth
+Auth [![Build Status](https://travis-ci.org/thrust-bitcodes/auth.svg?branch=master)](https://travis-ci.org/thrust-bitcodes/auth)
 ===============
 
 Auth é um *bitcode* de autenticação/autorização para [thrust](https://github.com/thrustjs/thrust) que utiliza JWT *(JSON Web Token)* como mecanismo principal.
