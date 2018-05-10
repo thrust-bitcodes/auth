@@ -262,4 +262,3 @@ Acesse também os outros *bitcodes* utilizados no exemplo para melhor entendimen
 - [thrust-bitcodes/url-parser](https://github.com/thrust-bitcodes/url-parser)
 - [thrust-bitcodes/http](https://github.com/thrust-bitcodes/http)
 - [thrust-bitcodes/router](https://github.com/thrust-bitcodes/router)
-

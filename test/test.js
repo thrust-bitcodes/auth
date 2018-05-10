@@ -227,3 +227,5 @@ print(res.failure.length, " scenarios executed with failure.\n")
 res.failure.forEach(function (fail) {
     print("[" + fail.scenario + "] =>", fail.execption)
 })
+
+exit(res.failure.length);
