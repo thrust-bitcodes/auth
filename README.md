@@ -101,6 +101,7 @@ function inserirProduto(params, request, response) {
   //...
 }
 ```
+
 ## Validar apenas a autorização
 
 É possível também utilizar apenas a parte de autorização do bitcode, visto que existem aplicações onde a autenticação já é gerenciada por outros mecanismos.
