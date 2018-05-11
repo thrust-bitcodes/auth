@@ -3,9 +3,9 @@ services:
   - docker
 
 before_install:
-  - docker build -t thrust-v4 ci/
+  - docker build -t thrust ci/
 
-script: docker run --rm -v $(pwd):/app thrust-v4  /bin/sh -c "cd app/test && thrust install && thrust test.js"
+script: docker run --rm -v $(pwd):/app -w /app/test thrust /bin/sh -c "thrust install && thrust test.js"
 
 deploy:
   provider: releases
