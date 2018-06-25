@@ -184,8 +184,10 @@ var Auth = function () {
 * @code authentication.createAuthentication(params, request, response, 341, 'mobileApp1', {profile: 'admin'})
 */
   this.createAuthentication = function (params, request, response, userId, appId, data) {
+    var expires = new Date().getTime() + getAccessTokenTTL(appId)
+
     var tkn = jwt.serialize({
-      exp: new Date().getTime() + getAccessTokenTTL(appId),
+      exp: expires,
       iss: appId,
       rtexp: new Date().getTime() + getRefreshTokenTTL(appId),
       udata: {
@@ -195,7 +197,7 @@ var Auth = function () {
       }
     }, true)
 
-    setTokenIntoHeader(params, request, response, tkn);
+    setTokenIntoHeader(params, request, response, tkn, expires);
 
     return tkn;
   }
@@ -315,13 +317,13 @@ var Auth = function () {
     token.exp = new Date().getTime() + getAccessTokenTTL(token.udata.app)
     token.rtexp = new Date().getTime() + getRefreshTokenTTL(token.udata.app)
 
-    setTokenIntoHeader(params, request, response, jwt.serialize(token, true))
+    setTokenIntoHeader(params, request, response, jwt.serialize(token, true), token.exp)
   }
 
-  function setTokenIntoHeader(params, request, response, serializedToken) {
+  function setTokenIntoHeader(params, request, response, serializedToken, expires) {
     var tknAppName = getTokenName(params, request)
 
-    var cookieStr = tknAppName + '=' + serializedToken + ';HttpOnly;path=/;' + (_useSecureAuthentication ? 'secure;' : '');
+    var cookieStr = tknAppName + '=' + serializedToken + ';HttpOnly;path=/;' + (_useSecureAuthentication ? 'secure;' : '') + ';expires=' + new Date(expires).toUTCString()
 
     response.addHeader('Set-Cookie', cookieStr)
   }
