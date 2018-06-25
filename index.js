@@ -323,7 +323,7 @@ var Auth = function () {
   function setTokenIntoHeader(params, request, response, serializedToken, expires) {
     var tknAppName = getTokenName(params, request)
 
-    var secure = (authenticationConfig('useSecureAuthentication') ? 'secure;' : '');
+    var secure = (_useSecureAuthentication ? 'secure;' : '');
     expires = (expires ? ';expires=' + new Date(expires).toUTCString() : '')
 
     var cookieStr = tknAppName + '=' + serializedToken + ';HttpOnly;path=/;' + secure + expires
