@@ -197,7 +197,7 @@ var Auth = function () {
       }
     }, true)
 
-    setTokenIntoHeader(params, request, response, tkn, expires);
+    setTokenIntoHeader(params, request, response, tkn);
 
     return tkn;
   }
@@ -317,14 +317,14 @@ var Auth = function () {
     token.exp = new Date().getTime() + getAccessTokenTTL(token.udata.app)
     token.rtexp = new Date().getTime() + getRefreshTokenTTL(token.udata.app)
 
-    setTokenIntoHeader(params, request, response, jwt.serialize(token, true), token.exp)
+    setTokenIntoHeader(params, request, response, jwt.serialize(token, true))
   }
 
-  function setTokenIntoHeader(params, request, response, serializedToken, expires) {
+  function setTokenIntoHeader(params, request, response, serializedToken) {
     var tknAppName = getTokenName(params, request)
 
     var secure = (_useSecureAuthentication ? 'secure;' : '');
-    expires = (expires ? ';expires=' + new Date(expires).toUTCString() : '')
+    var expires = ';expires=' + new Date(new Date().getFullYear() + 5, 00, 01).toUTCString();
 
     var cookieStr = tknAppName + '=' + serializedToken + ';HttpOnly;path=/;' + secure + expires
     
