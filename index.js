@@ -77,6 +77,31 @@ var Auth = function () {
     return self;
   };
 
+/**
+* Método utilizado para setar as URLs que não necessitam de autenticação.
+* @example
+* @file startup.js
+* @code auth.notAuthenticatedUrls([]);
+*/
+this.addNotAuthenticatedUrls = function (urls) {
+  if (urls) {
+    urls = typeof urls === 'string' ? [urls] : urls;
+    _notAuthenticatedUrls = _notAuthenticatedUrls.concat(urlParser.buildUrlRules(urls));
+  }
+
+  return self;
+};
+
+this.getNotAuthenticatedUrls = function () {
+  return _notAuthenticatedUrls
+}
+
+this.clearNotAuthenticatedUrls = function (urls) {
+  _notAuthenticatedUrls = []
+
+  return self;
+};
+
   /**
   * Método utilizado para setar a expiração do token.
   * Pode ser passado como argumento apenas o tempo, que então mudará o default, ou passar junto com um nome de aplicação, que configurará apenas para esta.
